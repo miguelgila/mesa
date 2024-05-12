@@ -1,9 +1,8 @@
-build = "build.rs"
-
 [package]
 edition = "2021"
 authors = ["Manuel Sopena Ballesteros <msopena@cscs.ch>"]
 name = "mesa"
+build = "build.rs"
 description = "A library for Shasta"
 version = "0.35.6"
 license-file = "LICENSE"
@@ -75,12 +74,25 @@ tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
 rand = "0.8.5"
 tempfile = "3.8.1"
 uuid = "1.6.1"
+libc = "0.2.154"
 # aws-smithy-runtime-api = "0.56.1"
 # aws-smithy-runtime = "0.56.1"
+
+safer-ffi.version = "0.1.7"
+safer-ffi.features = [] # you may add some later on.
+inline-c = "0.1.7"
+protobuf = "3.4.0"
+
+[dev-dependencies]
+inline-c = "0.1"
 
 [build-dependencies]
 clap = "4.0.32"
 clap_complete = "4.0.3"
+cbindgen = "0.26.0"
+protobuf-codegen = "3.4.0"
+protoc-rust = "2.28.0"
+
 
 [profile.release]
 opt-level = "s" # Tell `rustc` to optimize for small code size.
@@ -107,6 +119,18 @@ installers = []
 # Whether to consider the binaries in a package for distribution (defaults true)
 dist = true
 
-#[features]
+[features]
 #dhat-heap = []    # if you are doing heap profiling
 #dhat-ad-hoc = []  # if you are doing ad hoc profiling
+headers = ["safer-ffi/headers"]
+
+[lib]
+crate-type = [
+    "staticlib",  # Ensure it gets compiled as a (static) C library
+    #     "cdylib",     # If you want a shared/dynamic C library (advanced)
+    "lib",        # For `generate-headers`, `examples/`, `tests/` etc.
+]
+
+[[bin]]
+name = "generate-headers"
+required-features = ["headers"]  # Do not build unless generating headers.

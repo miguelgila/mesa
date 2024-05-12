@@ -9,3 +9,4 @@ pub mod error;
 pub mod hsm;
 pub mod ims;
 pub mod node;
+pub mod terraform;

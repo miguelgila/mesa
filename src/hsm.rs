@@ -136,6 +136,8 @@ pub mod r#hw_components {
 
 pub mod r#struct {
     use serde::{Deserialize, Serialize};
+    use ::safer_ffi::prelude::*;
+
 
     #[derive(Debug, Serialize, Deserialize, Clone)]
     pub struct HsmGroup {
@@ -205,6 +207,7 @@ pub mod group {
                     .await?
                     .error_for_status()
             }
+
 
             pub async fn get(
                 shasta_token: &str,
